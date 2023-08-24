@@ -22,7 +22,10 @@ body {
 
 
 
-.operation {
+.operation,
+.ca,
+.delete,
+.equals{
     background-color: cornflowerblue;
 
 }
@@ -90,7 +93,11 @@ body {
     scale: 0.8;
     transition: 50ms linear 1ms;
 }
-
+.side-operation:active {
+    background-color: white;
+    scale: 0.8;
+    transition: 50ms linear 1ms;
+}
 /* 
 create an inward glow for the calc's display
 
