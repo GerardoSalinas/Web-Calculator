@@ -2,6 +2,7 @@
 
 body {
     /* background-color: rgb(34, 31, 31); */
+    background-color: #d1d1d1;
     font-family: 'Roboto',sans-serif;
 }
 
@@ -10,7 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     border: 2px solid rgb(71, 70, 70);
-    border-radius: 30px;
+    border-radius: 35px;
     width: 480px;
     height: 480px;
     margin: auto;
@@ -26,20 +27,20 @@ body {
 
 }
 
-.faces{
-    display: flex;
-    align-self: flex-end;
-    background-color: aquamarine;
-}
 
 .display-container{
     display: flex;
     flex-direction: column;
-    background-color: blue;
+    justify-content: space-between;
+    background-color: #dbdbdb;
     border: 2px solid azure;
+    border-radius: 15px;
     margin-top: 20px;
     margin-bottom: 50px;
-    height: 500px;
+    box-sizing: border-box;
+    height: 480px;
+    box-shadow: inset -60px 0px 120px rgba(96, 205, 219, 0.781),
+                inset 60px 0px 120px rgba(96, 205, 219, 0.781);
 }
 
 .expression {
@@ -53,18 +54,44 @@ body {
 }
 
 .button-container {
-    background-color: aqua;
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 15px;
+}
+
+.row {
+    display: flex;
+    gap: 20px;
 }
 
 .row > *{
     border: 2px solid white;
-    border-radius: 25px;
+    flex: 1;
+    border-radius: 65%;
     font-size: 30px;
     padding: 5px;
     justify-content: center;
     align-content: center;
 }
+
+.equals {
+    flex: 2;
+}
+
+.digit:active {
+    background-color: cornflowerblue;
+    scale: 0.8;
+    transition: 50ms linear 1ms;
+}
+
+.operation:active {
+    background-color: white;
+    scale: 0.8;
+    transition: 50ms linear 1ms;
+}
+
+/* 
+create an inward glow for the calc's display
+
+*/
