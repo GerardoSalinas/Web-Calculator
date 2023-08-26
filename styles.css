@@ -27,7 +27,7 @@ body {
 .delete,
 .equals{
     background-color: cornflowerblue;
-
+    font-weight: 700;
 }
 
 
@@ -48,12 +48,14 @@ body {
 
 .expression {
     margin: 5px;
+    font-size: 25px;
 }
 
 .answer{
     display: flex;
     align-self: flex-end;
     margin: 5px;
+    font-size: 25px;
 }
 
 .button-container {

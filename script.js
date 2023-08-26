@@ -14,16 +14,16 @@ function divide(num1,num2){
     return result;
 }
 
-function multiply(num1,num2){
+function multiply(num1,num2){//works with integers
     return num1*num2;
 }
 
-function add(num1, num2){
-    return num1+num2;
+function add(num1, num2){//works with integers
+    return +num1 + +num2;
 }
 
 function subtract(num1,num2){
-    return num1-num2;
+    return parseInt(num1)-parseInt(num2);
 }
 
 function operate (num1,operator,num2){
@@ -52,14 +52,15 @@ function scanDisplay(){
     const symbols = ['+','-','\u00d7','\u00F7'];
     let indexSymbol;
     let information = [];
-    symbols.forEach(function(item,index){
-        if (!displayText.indexOf(item)){//!==-1
-            indexSymbol = index;
-            information[1] = item;
+    symbols.forEach(function(item) {
+        if(displayText.indexOf(item)!==-1){//si contiene el simbolo
+            indexSymbol = displayText.indexOf(item);
         }
     });
-    information[0] = displayExpression.innerHTML.slice(0,indexSymbol);
-    information[2] = displayExpression.innerHTML.slice(indexSymbol+1);
+
+    information.push(displayExpression.innerHTML.slice(0,indexSymbol));
+    information.push(displayText[indexSymbol]);
+    information.push(displayExpression.innerHTML.slice(indexSymbol+1));
     return information;
 }
 
