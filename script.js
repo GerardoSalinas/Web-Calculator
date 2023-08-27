@@ -1,7 +1,7 @@
 //functions
 function divide(num1,num2){
     let result;
-    if (num2 === 0){
+    if (parseInt(num2) === 0){
         result = 'SYNTAX ERROR';
     }else{
         result = num1/num2;
@@ -15,7 +15,7 @@ function divide(num1,num2){
 }
 
 function multiply(num1,num2){//works with integers
-    return num1*num2;
+    return parseInt(num1)*parseInt(num2);
 }
 
 function add(num1, num2){//works with integers
@@ -47,8 +47,23 @@ function operate (num1,operator,num2){
     return result;
 }
 
-function scanDisplay(){
+function moreThanOneSymbol(){
+    let result = false; //assuming there is only one symbol
     let displayText = displayExpression.innerHTML.split('');
+    displayText.pop();//quitamos el ultimo elemento
+    const symbols = ['+','-','\u00d7','\u00F7'];
+    symbols.forEach(function (item){
+        if (displayText.includes(item)){
+            result = true;
+            return;
+        }
+    });
+    return result;
+}
+
+function scanDisplay(displayText){//valor por defecto
+    // let displayText = displayExpression.innerHTML.split('');
+    displayText = displayText.split('');
     const symbols = ['+','-','\u00d7','\u00F7'];
     let indexSymbol;
     let information = [];
@@ -57,10 +72,10 @@ function scanDisplay(){
             indexSymbol = displayText.indexOf(item);
         }
     });
-
-    information.push(displayExpression.innerHTML.slice(0,indexSymbol));
-    information.push(displayText[indexSymbol]);
-    information.push(displayExpression.innerHTML.slice(indexSymbol+1));
+    let displaystring = displayText.join('');
+    information.push(displaystring.slice(0,indexSymbol));
+    information.push(displaystring[indexSymbol]);
+    information.push(displaystring.slice(indexSymbol+1));
     return information;
 }
 
@@ -83,7 +98,17 @@ digits.forEach(function (digit) {
 
 operations.forEach(function (item) {
     item.addEventListener('click', function () {
-        displayExpression.innerHTML = displayExpression.innerHTML +`${item.innerHTML}`;
+        //evaluar operacion anterior
+        // let result;
+        displayExpression.innerHTML = displayExpression.innerHTML +`${item.innerHTML}`;//12+7-
+        if (moreThanOneSymbol()){
+            let displayText = displayExpression.innerHTML.split('');//[1,2,+,7,-]
+            displayText.pop();
+            displayText = displayText.join('');//12+7
+            let result = evaluate(displayText);
+            let lastSymbol = displayExpression.innerHTML.charAt(displayExpression.innerHTML.length-1);
+            displayExpression.innerHTML = result+lastSymbol;
+        }
     });
 });
 
@@ -105,10 +130,20 @@ decimal.addEventListener('click', function(){
 });
 
 equals.addEventListener('click', function (){
-    const data = scanDisplay();
+    /* const data = scanDisplay();
+    let operationResult = operate(data[0],data[1],data[2]);
+    if (operationResult !== undefined){
+        answer.innerHTML = operationResult;
+    } */
+    evaluate();
+});
+
+function evaluate(displayText = displayExpression.innerHTML){
+    const data = scanDisplay(displayText);
     let operationResult = operate(data[0],data[1],data[2]);
     if (operationResult !== undefined){
         answer.innerHTML = operationResult;
     }
-});
+    return operationResult;
+}
 
