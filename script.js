@@ -101,7 +101,7 @@ function getRandomColor(){
 
 function randomizeShadow(){
     const randomColor = getRandomColor();
-    mainFrame.style.boxShadow = `0px 0px 20px 0px ${randomColor}`; 
+    mainFrame.style.boxShadow = `0px 0px 15px 5px ${randomColor}`; 
 }
 
 // creating eventlisteners for all digits
