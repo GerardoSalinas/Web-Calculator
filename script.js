@@ -1,29 +1,39 @@
 //functions
 function divide(num1,num2){
-    let result;
+    let calculation;
     if (parseInt(num2) === 0){
-        result = 'SYNTAX ERROR';
+        calculation = 'SYNTAX ERROR';
     }else{
-        result = num1/num2;
-        if (result%1 === 0){
-            result = Math.round(result);
-        }else{
-            result = result.toFixed(3);
-        }
+        calculation = num1/num2;
+        calculation = fixDecimalPoint(calculation);
+    }
+    return calculation;
+}
+
+function fixDecimalPoint(number){
+    let result;
+    if (number%1 === 0){
+        result = Math.round(number);
+    }else{
+        result = number.toFixed(3);
     }
     return result;
 }
 
 function multiply(num1,num2){//works with integers
-    return parseInt(num1)*parseInt(num2);
+    let calculation = parseFloat(num1)*parseFloat(num2);
+    return fixDecimalPoint(calculation);
 }
 
 function add(num1, num2){//works with integers
-    return +num1 + +num2;
+    let calculation = parseFloat(num1) + parseFloat(num2);
+    return fixDecimalPoint(calculation);
 }
 
 function subtract(num1,num2){
-    return parseInt(num1)-parseInt(num2);
+    let calculation = parseFloat(num1)-parseFloat(num2);
+
+    return fixDecimalPoint(calculation);
 }
 
 function operate (num1,operator,num2){
@@ -79,6 +89,21 @@ function scanDisplay(displayText){//valor por defecto
     return information;
 }
 
+function getRandomColor(){
+    let rgbValues = [] ;
+    let randNumber;
+    for (let i = 0; i<3; i++){
+        randNumber = Math.floor(Math.random() * (255 - 0 + 1) ) + 0;
+        rgbValues.push(randNumber);
+    } 
+    return `rgb(${rgbValues[0]},${rgbValues[1]},${rgbValues[2]})`; 
+}
+
+function randomizeShadow(){
+    const randomColor = getRandomColor();
+    mainFrame.style.boxShadow = `0px 0px 10px 0px ${randomColor}`; 
+}
+
 // creating eventlisteners for all digits
 let displayExpression = document.querySelector('.expression');
 let digits = document.querySelectorAll('.digit');
@@ -87,11 +112,13 @@ let clearAll = document.querySelector('.ca');
 let decimal = document.querySelector('.decimal');
 let answer = document.querySelector('.answer');
 let equals = document.querySelector('.equals');
+let mainFrame = document.querySelector('.main-body');
 
 let operations = document.querySelectorAll('.operation');
 
 digits.forEach(function (digit) {
     digit.addEventListener('click', function() {
+        randomizeShadow();
         displayExpression.innerHTML = displayExpression.innerHTML +`${digit.innerHTML}`;
     });
 });

@@ -7,26 +7,30 @@ body {
 }
 
 .main-body {
-    background-color: rgb(71, 70, 70);
+    background-color: #ffb7a1;
     display: flex;
     flex-direction: column;
-    border: 2px solid rgb(71, 70, 70);
+    border: 2px solid transparent;
     border-radius: 35px;
     width: 480px;
     height: 480px;
     margin: auto;
     margin-top: 40px;
     padding: 20px 15px;
-    /* box-shadow: 20px 20px 15px 15px rgb(248, 113, 23); */
+    box-shadow: 0px 0px 10px 0px rgb(248, 113, 23);
 }
 
 
 
-.operation,
+.operation{
+    background-color: #F95738;
+    font-weight: 700;
+}
+
 .ca,
 .delete,
 .equals{
-    background-color: cornflowerblue;
+    background-color: #F4D35E;
     font-weight: 700;
 }
 
@@ -36,16 +40,16 @@ body {
     flex-direction: column;
     justify-content: space-between;
     background-color: #dbdbdb;
-    border: 2px solid azure;
+    border: 2px solid transparent;
     border-radius: 15px;
     margin-top: 20px;
     margin-bottom: 50px;
     box-sizing: border-box;
     height: 480px;
-    box-shadow: inset -60px 0px 120px rgba(96, 205, 219, 0.781),
-                inset 60px 0px 120px rgba(96, 205, 219, 0.781);
+    box-shadow: inset 0px 0px 120px #ffb171,
+                inset 0px 0px 120px #ffb171;
 }
-
+/* rgba(96, 205, 219, 0.781) */
 .expression {
     margin: 5px;
     font-size: 25px;
@@ -71,34 +75,50 @@ body {
 }
 
 .row > *{
-    border: 2px solid white;
+    border: 2px solid transparent;
+    color: whitesmoke;
     flex: 1;
-    border-radius: 65%;
+    border-radius: 15%;
     font-size: 30px;
     padding: 5px;
     justify-content: center;
     align-content: center;
 }
 
+.digit {
+    background-color: #EE964B;
+}
+.decimal{
+    background-color: #EE964B;
+}
 .equals {
     flex: 2;
 }
 
 .digit:active {
-    background-color: cornflowerblue;
+    background-color: white;
+    color: black;
     scale: 0.8;
-    transition: 50ms linear 1ms;
+    transition: 10ms linear 1ms;
 }
 
 .operation:active {
     background-color: white;
     scale: 0.8;
-    transition: 50ms linear 1ms;
+    transition: 10ms linear 1ms;
 }
 .side-operation:active {
     background-color: white;
     scale: 0.8;
-    transition: 50ms linear 1ms;
+    transition: 10ms linear 1ms;
+}
+.decimal:active{
+    background-color: cornflowerblue;
+    scale: 0.8;
+    transition: 10ms linear 1ms;
+}
+button:hover {
+    color: black;
 }
 /* 
 create an inward glow for the calc's display
