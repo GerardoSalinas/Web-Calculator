@@ -2,7 +2,7 @@
 
 body {
     /* background-color: rgb(34, 31, 31); */
-    background-color: #d1d1d1;
+    background-color: black;
     font-family: 'Roboto',sans-serif;
 }
 
@@ -17,7 +17,7 @@ body {
     margin: auto;
     margin-top: 40px;
     padding: 20px 15px;
-    box-shadow: 0px 0px 10px 0px rgb(248, 113, 23);
+    box-shadow: 0px 0px 20px 5px rgb(248, 113, 23);
 }
 
 
