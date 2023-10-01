@@ -72,7 +72,6 @@ function moreThanOneSymbol(){
 }
 
 function scanDisplay(displayText){//valor por defecto
-    // let displayText = displayExpression.innerHTML.split('');
     displayText = displayText.split('');
     const symbols = ['+','-','\u00d7','\u00F7'];
     let indexSymbol;
@@ -89,22 +88,7 @@ function scanDisplay(displayText){//valor por defecto
     return information;
 }
 
-function getRandomColor(){
-    let rgbValues = [] ;
-    let randNumber;
-    for (let i = 0; i<3; i++){
-        randNumber = Math.floor(Math.random() * (255 - 0 + 1) ) + 0;
-        rgbValues.push(randNumber);
-    } 
-    return `rgb(${rgbValues[0]},${rgbValues[1]},${rgbValues[2]})`; 
-}
 
-function randomizeShadow(){
-    const randomColor = getRandomColor();
-    mainFrame.style.boxShadow = `0px 0px 15px 5px ${randomColor}`; 
-}
-
-// creating eventlisteners for all digits
 let displayExpression = document.querySelector('.expression');
 let digits = document.querySelectorAll('.digit');
 let clear = document.querySelector('.delete');
@@ -116,22 +100,22 @@ let mainFrame = document.querySelector('.main-body');
 
 let operations = document.querySelectorAll('.operation');
 
+
+
 digits.forEach(function (digit) {
-    digit.addEventListener('click', function() {
-        randomizeShadow();
+    digit.addEventListener('click', function () {
+        // randomizeShadow();
         displayExpression.innerHTML = displayExpression.innerHTML +`${digit.innerHTML}`;
     });
 });
 
 operations.forEach(function (item) {
     item.addEventListener('click', function () {
-        //evaluar operacion anterior
-        // let result;
-        displayExpression.innerHTML = displayExpression.innerHTML +`${item.innerHTML}`;//12+7-
+        displayExpression.innerHTML = displayExpression.innerHTML +`${item.innerHTML}`;
         if (moreThanOneSymbol()){
-            let displayText = displayExpression.innerHTML.split('');//[1,2,+,7,-]
+            let displayText = displayExpression.innerHTML.split('');
             displayText.pop();
-            displayText = displayText.join('');//12+7
+            displayText = displayText.join('');
             let result = evaluate(displayText);
             let lastSymbol = displayExpression.innerHTML.charAt(displayExpression.innerHTML.length-1);
             displayExpression.innerHTML = result+lastSymbol;
@@ -144,12 +128,12 @@ clearAll.addEventListener('click', function() {
     answer.innerHTML = '';
 });
 
-clear.addEventListener('click', function(){
+clear.addEventListener('click', function (){
     let text = displayExpression.innerHTML;
     displayExpression.innerHTML = text.slice(0,text.length-1);
 });
 
-decimal.addEventListener('click', function(){
+decimal.addEventListener('click', function (){
     let characaters = displayExpression.innerHTML.split('');
     if(!characaters.includes('.')){
         displayExpression.innerHTML = displayExpression.innerHTML +`${decimal.innerHTML}`;
@@ -157,20 +141,43 @@ decimal.addEventListener('click', function(){
 });
 
 equals.addEventListener('click', function (){
-    /* const data = scanDisplay();
-    let operationResult = operate(data[0],data[1],data[2]);
-    if (operationResult !== undefined){
-        answer.innerHTML = operationResult;
-    } */
     evaluate();
 });
 
 function evaluate(displayText = displayExpression.innerHTML){
     const data = scanDisplay(displayText);
     let operationResult = operate(data[0],data[1],data[2]);
-    if (operationResult !== undefined){
-        answer.innerHTML = operationResult;
-    }
-    return operationResult;
+    let finalResult;
+    if(isNaN(operationResult)){
+        finalResult = 'SYNTAX ERROR';
+    }else{
+        finalResult = operationResult;
+    }    
+    answer.innerHTML = finalResult;
 }
+
+document.addEventListener('keyup', function(e) {
+    console.log(e);
+    let triggerEvent = new Event('click');
+    switch (e.key) {
+        case '+': case '-': case '*':
+
+            break;
+        case '0': case '1': case '2': case '3':
+        case '4': case '5': case '6': case '7':
+        case '8': case '9': 
+            digits.dispatchEvent(triggerEvent);
+            break;
+        case 'Enter':
+            equals.dispatchEvent(triggerEvent);
+            break;
+        case 'Backspace': 
+            clear.dispatchEvent(triggerEvent);
+        case '.':
+            decimal.dispatchEvent(triggerEvent);
+            break;
+        default:
+            break;
+    }
+});
 

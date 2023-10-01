@@ -2,12 +2,14 @@
 
 body {
     /* background-color: rgb(34, 31, 31); */
-    background-color: black;
+    /* background-color: #333333; */
+    background-color: #111827;
     font-family: 'Roboto',sans-serif;
 }
 
 .main-body {
-    background-color: #ffb7a1;
+    /* background-color: #ffb7a1; */
+    background-color: #333333;
     display: flex;
     flex-direction: column;
     border: 2px solid transparent;
@@ -23,14 +25,15 @@ body {
 
 
 .operation{
-    background-color: #F95738;
+    /* background-color: #F95738; */
+    background-color: #111111;
     font-weight: 700;
 }
 
 .ca,
 .delete,
 .equals{
-    background-color: #F4D35E;
+    background-color: #111111;
     font-weight: 700;
 }
 
@@ -39,9 +42,10 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 0.3rem;
     background-color: #dbdbdb;
-    border: 2px solid transparent;
-    border-radius: 15px;
+    /* border: 2px solid transparent; */
+    border-radius: 1rem;
     margin-top: 20px;
     margin-bottom: 50px;
     box-sizing: border-box;
@@ -66,11 +70,13 @@ body {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    /* gap: 15px; */
+    gap: 10px;
 }
 
 .row {
     display: flex;
+    /* gap: 20px; */
     gap: 20px;
 }
 
@@ -78,7 +84,7 @@ body {
     border: 2px solid transparent;
     color: whitesmoke;
     flex: 1;
-    border-radius: 15%;
+    border-radius: 1rem;
     font-size: 30px;
     padding: 5px;
     justify-content: center;
@@ -93,6 +99,16 @@ body {
 }
 .equals {
     flex: 2;
+    color:rgb(61, 74, 255);
+}
+
+.ca {
+    color: #c20000;
+    font-weight: 200;
+}
+
+.delete {
+    color: #008000;
 }
 
 .digit:active {
