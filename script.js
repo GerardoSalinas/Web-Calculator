@@ -104,9 +104,9 @@ let operations = document.querySelectorAll('.operation');
 
 digits.forEach(function (digit) {
     digit.addEventListener('click', function () {
-        // randomizeShadow();
         displayExpression.innerHTML = displayExpression.innerHTML +`${digit.innerHTML}`;
     });
+
 });
 
 operations.forEach(function (item) {
@@ -157,26 +157,39 @@ function evaluate(displayText = displayExpression.innerHTML){
 }
 
 document.addEventListener('keyup', function(e) {
+    //figure out this part!
+    e.preventDefault();
     console.log(e);
-    let triggerEvent = new Event('click');
-    switch (e.key) {
-        case '+': case '-': case '*':
-
-            break;
-        case '0': case '1': case '2': case '3':
-        case '4': case '5': case '6': case '7':
-        case '8': case '9': 
-            digits.dispatchEvent(triggerEvent);
+    let key = e.key;
+    const triggerEvent = new Event('click');
+    const digitNodesArray = Array.from(digits);
+    const operationNodesArray = Array.from(operations);
+    switch (key) {
+        case 'Backspace':
+            clear.dispatchEvent(triggerEvent);
             break;
         case 'Enter':
             equals.dispatchEvent(triggerEvent);
             break;
-        case 'Backspace': 
-            clear.dispatchEvent(triggerEvent);
+        case ' ':
+            clearAll.dispatchEvent(triggerEvent);
+            break;
+        case '/':
+            digitNodesArray.find((element) => element.innerHTML === '÷').dispatchEvent(triggerEvent);
+            break;
+        case '*':
+            operationNodesArray.find((element) => element.innerHTML === `\u00d7`).dispatchEvent(triggerEvent);
+            break; 
+        case '+': case '-':
+            operationNodesArray.find((element) => element.innerHTML === `${key}`).dispatchEvent(triggerEvent);
+            break;
         case '.':
-            decimal.dispatchEvent(triggerEvent);
+            digitNodesArray.find((element) => element.innerHTML === '.').dispatchEvent(triggerEvent);
             break;
         default:
+            if (Number.isInteger(Number.parseInt(key))){
+                digitNodesArray.find((element) => element.innerHTML === `${key}`).dispatchEvent(triggerEvent);
+            }
             break;
     }
 });
