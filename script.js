@@ -103,6 +103,12 @@ function toggleOperations (option){
     }
 }
 
+/* function newScanDisplay () {
+    let displayText = displayExpression.innerHTML.slice(0,displayExpression.length-1);
+    if(displayText.includes)
+    
+}
+ */
 
 let displayExpression = document.querySelector('.expression');
 let digits = document.querySelectorAll('.digit');
@@ -119,12 +125,17 @@ let operations = document.querySelectorAll('.operation');
 //callback functions for eventListeners
 function digitClickHandler() {
     displayExpression.innerHTML = displayExpression.innerHTML + `${this.innerHTML}`;
-    toggleOperations('activate'); //activa las operaciones
+    toggleOperations('activate'); 
 }
 
 function operationClickHandler(){
+    if (displayExpression.innerHTML === ''){
+        toggleOperations('deactivate'); 
+    }
     displayExpression.innerHTML = displayExpression.innerHTML +`${this.innerHTML}`;
-    toggleOperations('deactivate'); //desactiva las operaciones
+
+    toggleOperations('deactivate'); 
+
         /* 
         invoke the toggle function 
         check the value of the flag
@@ -181,7 +192,7 @@ function equalsClickHandler(displayText = displayExpression.innerHTML){
 //EventListeners
 digits.forEach((digit) => digit.addEventListener('click', digitClickHandler));
 
-operations.forEach((operation) => operation.addEventListener('click',operationClickHandler));    
+// operations.forEach((operation) => operation.addEventListener('click',operationClickHandler)); 
 
 clearAll.addEventListener('click',clearAllClickHandler );
 
