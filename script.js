@@ -148,6 +148,11 @@ function evaluate(displayText = displayExpression.innerHTML){
     const data = scanDisplay(displayText);
     let operationResult = operate(data[0],data[1],data[2]);
     let finalResult;
+    /* if (data === undefined || data === null){
+        return;
+    }else{
+
+    } */
     if(isNaN(operationResult)){
         finalResult = 'SYNTAX ERROR';
     }else{
@@ -156,11 +161,11 @@ function evaluate(displayText = displayExpression.innerHTML){
     answer.innerHTML = finalResult;
 }
 
-document.addEventListener('keyup', function(e) {
+document.addEventListener('keypress', function(e) {
     //figure out this part!
     e.preventDefault();
-    console.log(e);
     let key = e.key;
+    console.log(key);
     const triggerEvent = new Event('click');
     const digitNodesArray = Array.from(digits);
     const operationNodesArray = Array.from(operations);
@@ -175,7 +180,7 @@ document.addEventListener('keyup', function(e) {
             clearAll.dispatchEvent(triggerEvent);
             break;
         case '/':
-            digitNodesArray.find((element) => element.innerHTML === '÷').dispatchEvent(triggerEvent);
+            operationNodesArray.find((element) => element.innerHTML === '÷').dispatchEvent(triggerEvent);
             break;
         case '*':
             operationNodesArray.find((element) => element.innerHTML === `\u00d7`).dispatchEvent(triggerEvent);
@@ -184,7 +189,7 @@ document.addEventListener('keyup', function(e) {
             operationNodesArray.find((element) => element.innerHTML === `${key}`).dispatchEvent(triggerEvent);
             break;
         case '.':
-            digitNodesArray.find((element) => element.innerHTML === '.').dispatchEvent(triggerEvent);
+            decimal.dispatchEvent(triggerEvent);
             break;
         default:
             if (Number.isInteger(Number.parseInt(key))){
