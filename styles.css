@@ -56,14 +56,14 @@ body {
 /* rgba(96, 205, 219, 0.781) */
 .expression {
     margin: 5px;
-    font-size: 25px;
+    font-size: 1.875rem;
 }
 
 .answer{
     display: flex;
     align-self: flex-end;
     margin: 5px;
-    font-size: 25px;
+    font-size: 1.875rem;
 }
 
 .button-container {
