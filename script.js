@@ -88,6 +88,22 @@ function scanDisplay(displayText){//valor por defecto
     return information;
 }
 
+function toggleOperations (){
+    if (areOperationsEnabled === true){
+        operations.forEach(function (operation) {
+            operation.removeEventListener('click', operationClickHandler);
+        });
+        equals.removeEventListener('click', equalsClickHandler);
+        areOperationsEnabled = false;
+    }else{
+        operations.forEach(function (operation) {
+            operation.addEventListener('click', operationClickHandler);
+        });
+        equals.addEventListener('click', equalsClickHandler);
+        areOperationsEnabled = true;
+    }
+}
+
 
 let displayExpression = document.querySelector('.expression');
 let digits = document.querySelectorAll('.digit');
@@ -99,52 +115,55 @@ let equals = document.querySelector('.equals');
 let mainFrame = document.querySelector('.main-body');
 
 let operations = document.querySelectorAll('.operation');
+let areOperationsEnabled = true;
 
+//callback functions for eventListeners
 
+function digitClickHandler () {
+    displayExpression.innerHTML = displayExpression.innerHTML +`${digit.innerHTML}`;
+}
 
-digits.forEach(function (digit) {
-    digit.addEventListener('click', function () {
-        displayExpression.innerHTML = displayExpression.innerHTML +`${digit.innerHTML}`;
-    });
-
-});
-
-operations.forEach(function (item) {
-    item.addEventListener('click', function () {
-        displayExpression.innerHTML = displayExpression.innerHTML +`${item.innerHTML}`;
-        if (moreThanOneSymbol()){
+function operationClickHandler () {
+    displayExpression.innerHTML = displayExpression.innerHTML +`${item.innerHTML}`;
+    
+    toggleOperations();
+        /* 
+        invoke the toggle function 
+        check the value of the flag
+            if flag === true
+                iterate throw the nodeList removing the event listeners
+                change the flag to false;
+            if flag === false
+                iterate throw the nodeList activating the event listeners
+         */
+        /* if (moreThanOneSymbol()){
             let displayText = displayExpression.innerHTML.split('');
             displayText.pop();
             displayText = displayText.join('');
-            let result = evaluate(displayText);
+            let result = equalsClickHandler(displayText);
             let lastSymbol = displayExpression.innerHTML.charAt(displayExpression.innerHTML.length-1);
             displayExpression.innerHTML = result+lastSymbol;
-        }
-    });
-});
+        } */
+}
 
-clearAll.addEventListener('click', function() {
+function clearAllClickHandler (){
     displayExpression.innerHTML = '';
     answer.innerHTML = '';
-});
+}
 
-clear.addEventListener('click', function (){
+function clearClickHandler () {
     let text = displayExpression.innerHTML;
     displayExpression.innerHTML = text.slice(0,text.length-1);
-});
+}
 
-decimal.addEventListener('click', function (){
-    let characaters = displayExpression.innerHTML.split('');
-    if(!characaters.includes('.')){
+function decimalClickHandler (){
+    let characters = displayExpression.innerHTML.split('');
+    if(!characters.includes('.')){
         displayExpression.innerHTML = displayExpression.innerHTML +`${decimal.innerHTML}`;
     }
-});
+}
 
-equals.addEventListener('click', function (){
-    evaluate();
-});
-
-function evaluate(displayText = displayExpression.innerHTML){
+function equalsClickHandler(displayText = displayExpression.innerHTML){
     const data = scanDisplay(displayText);
     let operationResult = operate(data[0],data[1],data[2]);
     let finalResult;
@@ -160,6 +179,25 @@ function evaluate(displayText = displayExpression.innerHTML){
     }    
     answer.innerHTML = finalResult;
 }
+
+//EventListeners
+digits.forEach(function (digit) {
+    digit.addEventListener('click',digitClickHandler);
+
+});
+
+operations.forEach(function (item) {
+    item.addEventListener('click',operationClickHandler);
+});    
+
+clearAll.addEventListener('click',clearAllClickHandler );
+
+clear.addEventListener('click',clearClickHandler);
+
+decimal.addEventListener('click',decimalClickHandler);
+
+equals.addEventListener('click',equalsClickHandler);
+
 
 document.addEventListener('keypress', function(e) {
     //figure out this part!
@@ -198,4 +236,5 @@ document.addEventListener('keypress', function(e) {
             break;
     }
 });
+
 
