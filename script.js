@@ -88,19 +88,18 @@ function scanDisplay(displayText){//valor por defecto
     return information;
 }
 
-function toggleOperations (){
-    if (areOperationsEnabled === true){
+function toggleOperations (option){
+    if (option === 'deactivate'){
         operations.forEach(function (operation) {
             operation.removeEventListener('click', operationClickHandler);
         });
         equals.removeEventListener('click', equalsClickHandler);
-        areOperationsEnabled = false;
-    }else{
+    }
+    if(option === 'activate'){
         operations.forEach(function (operation) {
             operation.addEventListener('click', operationClickHandler);
         });
         equals.addEventListener('click', equalsClickHandler);
-        areOperationsEnabled = true;
     }
 }
 
@@ -115,18 +114,17 @@ let equals = document.querySelector('.equals');
 let mainFrame = document.querySelector('.main-body');
 
 let operations = document.querySelectorAll('.operation');
-let areOperationsEnabled = true;
+// let areOperationsEnabled = true;
 
 //callback functions for eventListeners
-
-function digitClickHandler () {
-    displayExpression.innerHTML = displayExpression.innerHTML +`${digit.innerHTML}`;
+function digitClickHandler() {
+    displayExpression.innerHTML = displayExpression.innerHTML + `${this.innerHTML}`;
+    toggleOperations('activate'); //activa las operaciones
 }
 
-function operationClickHandler () {
-    displayExpression.innerHTML = displayExpression.innerHTML +`${item.innerHTML}`;
-    
-    toggleOperations();
+function operationClickHandler(){
+    displayExpression.innerHTML = displayExpression.innerHTML +`${this.innerHTML}`;
+    toggleOperations('deactivate'); //desactiva las operaciones
         /* 
         invoke the toggle function 
         check the value of the flag
@@ -181,14 +179,9 @@ function equalsClickHandler(displayText = displayExpression.innerHTML){
 }
 
 //EventListeners
-digits.forEach(function (digit) {
-    digit.addEventListener('click',digitClickHandler);
+digits.forEach((digit) => digit.addEventListener('click', digitClickHandler));
 
-});
-
-operations.forEach(function (item) {
-    item.addEventListener('click',operationClickHandler);
-});    
+operations.forEach((operation) => operation.addEventListener('click',operationClickHandler));    
 
 clearAll.addEventListener('click',clearAllClickHandler );
 
