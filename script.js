@@ -57,36 +57,6 @@ function operate (num1,operator,num2){
     return result;
 }
 
-function moreThanOneSymbol(){
-    let result = false; //assuming there is only one symbol
-    let displayText = displayExpression.innerHTML.split('');
-    displayText.pop();//quitamos el ultimo elemento
-    const symbols = ['+','-','\u00d7','\u00F7'];
-    symbols.forEach(function (item){
-        if (displayText.includes(item)){
-            result = true;
-            return;
-        }
-    });
-    return result;
-}
-
-function scanDisplay(displayText){//valor por defecto
-    displayText = displayText.split('');
-    const symbols = ['+','-','\u00d7','\u00F7'];
-    let indexSymbol;
-    let information = [];
-    symbols.forEach(function(item) {
-        if(displayText.indexOf(item)!==-1){//si contiene el simbolo
-            indexSymbol = displayText.indexOf(item);
-        }
-    });
-    let displaystring = displayText.join('');
-    information.push(displaystring.slice(0,indexSymbol));
-    information.push(displaystring[indexSymbol]);
-    information.push(displaystring.slice(indexSymbol+1));
-    return information;
-}
 
 function toggleOperations (option){
     if (option === 'deactivate'){
@@ -165,7 +135,7 @@ function decimalClickHandler (){
     if(!characters.includes('.')){
         displayExpression.innerHTML = displayExpression.innerHTML +`${decimal.innerHTML}`;
     }
-}//77+15
+}
 
 function equalsClickHandler(){
     let symbolIndex = newScanDisplay();
@@ -175,8 +145,10 @@ function equalsClickHandler(){
     let operand2 = displayText.slice(symbolIndex+1);
     let finalResult = operate(operand1, operator, operand2);
     
-    
-    answer.innerHTML = finalResult;
+    //fix this part by checking if finalresult is undefined
+    if (typeof finalResult !== 'undefined'){
+        answer.innerHTML = finalResult;
+    }
 }
 
 //EventListeners
@@ -194,17 +166,12 @@ equals.addEventListener('click',equalsClickHandler);
 
 
 document.addEventListener('keypress', function(e) {
-    //figure out this part!
     e.preventDefault();
     let key = e.key;
-    console.log(key);
     const triggerEvent = new Event('click');
     const digitNodesArray = Array.from(digits);
     const operationNodesArray = Array.from(operations);
     switch (key) {
-        case 'Backspace':
-            clear.dispatchEvent(triggerEvent);
-            break;
         case 'Enter':
             equals.dispatchEvent(triggerEvent);
             break;
@@ -230,5 +197,12 @@ document.addEventListener('keypress', function(e) {
             break;
     }
 });
+
+document.addEventListener('keydown', function (e) {
+    const triggerEvent = new Event('click');
+    if(e.key === 'Backspace'){
+        clear.dispatchEvent(triggerEvent);
+    }
+})
 
 
