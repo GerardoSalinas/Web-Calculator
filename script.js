@@ -64,12 +64,14 @@ function toggleOperations (option){
             operation.removeEventListener('click', operationClickHandler);
         });
         equals.removeEventListener('click', equalsClickHandler);
+        availableOperations = false;
     }
     if(option === 'activate'){
         operations.forEach(function (operation) {
             operation.addEventListener('click', operationClickHandler);
         });
         equals.addEventListener('click', equalsClickHandler);
+        availableOperations = true;
     }
 }
 
@@ -96,7 +98,7 @@ let equals = document.querySelector('.equals');
 let mainFrame = document.querySelector('.main-body');
 
 let operations = document.querySelectorAll('.operation');
-
+let availableOperations = false;
 //callback functions for eventListeners
 function digitClickHandler() {
     displayExpression.innerHTML = displayExpression.innerHTML + `${this.innerHTML}`;
@@ -128,6 +130,9 @@ function clearAllClickHandler (){
 function clearClickHandler () {
     let text = displayExpression.innerHTML;
     displayExpression.innerHTML = text.slice(0,text.length-1);
+    if(availableOperations === false && text !== ''){
+        toggleOperations('activate');
+    }
 }
 
 function decimalClickHandler (){
