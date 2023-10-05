@@ -103,12 +103,18 @@ function toggleOperations (option){
     }
 }
 
-/* function newScanDisplay () {
-    let displayText = displayExpression.innerHTML.slice(0,displayExpression.length-1);
-    if(displayText.includes)
-    
+function newScanDisplay () {
+    let displayText = displayExpression.innerHTML.slice(0,displayExpression.innerHTML.length-1);
+    const symbols = ['+','-','\u00d7','\u00F7'];
+    let symbolIndex = -1;
+    for (let symbol of symbols){
+        if (displayText.includes(symbol)){
+            symbolIndex = displayText.indexOf(symbol);
+            break;
+        }
+    }
+    return symbolIndex;    
 }
- */
 
 let displayExpression = document.querySelector('.expression');
 let digits = document.querySelectorAll('.digit');
@@ -120,7 +126,6 @@ let equals = document.querySelector('.equals');
 let mainFrame = document.querySelector('.main-body');
 
 let operations = document.querySelectorAll('.operation');
-// let areOperationsEnabled = true;
 
 //callback functions for eventListeners
 function digitClickHandler() {
@@ -133,26 +138,16 @@ function operationClickHandler(){
         toggleOperations('deactivate'); 
     }
     displayExpression.innerHTML = displayExpression.innerHTML +`${this.innerHTML}`;
-
     toggleOperations('deactivate'); 
-
-        /* 
-        invoke the toggle function 
-        check the value of the flag
-            if flag === true
-                iterate throw the nodeList removing the event listeners
-                change the flag to false;
-            if flag === false
-                iterate throw the nodeList activating the event listeners
-         */
-        /* if (moreThanOneSymbol()){
-            let displayText = displayExpression.innerHTML.split('');
-            displayText.pop();
-            displayText = displayText.join('');
-            let result = equalsClickHandler(displayText);
-            let lastSymbol = displayExpression.innerHTML.charAt(displayExpression.innerHTML.length-1);
-            displayExpression.innerHTML = result+lastSymbol;
-        } */
+    let symbolIndex = newScanDisplay();
+    if (symbolIndex !== -1){
+        let displayText = displayExpression.innerHTML.slice(0,displayExpression.innerHTML.length-1);
+        let operand1 = displayText.slice(0,symbolIndex);
+        let operator = displayText.at(symbolIndex);
+        let operand2 = displayText.slice(symbolIndex+1);
+        let result = operate(operand1, operator, operand2);
+        displayExpression.innerHTML = displayExpression.innerHTML.replace(displayText, String(result));
+    }
 }
 
 function clearAllClickHandler (){
@@ -170,22 +165,17 @@ function decimalClickHandler (){
     if(!characters.includes('.')){
         displayExpression.innerHTML = displayExpression.innerHTML +`${decimal.innerHTML}`;
     }
-}
+}//77+15
 
-function equalsClickHandler(displayText = displayExpression.innerHTML){
-    const data = scanDisplay(displayText);
-    let operationResult = operate(data[0],data[1],data[2]);
-    let finalResult;
-    /* if (data === undefined || data === null){
-        return;
-    }else{
-
-    } */
-    if(isNaN(operationResult)){
-        finalResult = 'SYNTAX ERROR';
-    }else{
-        finalResult = operationResult;
-    }    
+function equalsClickHandler(){
+    let symbolIndex = newScanDisplay();
+    let displayText = displayExpression.innerHTML;
+    let operand1 = displayText.slice(0,symbolIndex);
+    let operator = displayText.at(symbolIndex);
+    let operand2 = displayText.slice(symbolIndex+1);
+    let finalResult = operate(operand1, operator, operand2);
+    
+    
     answer.innerHTML = finalResult;
 }
 
