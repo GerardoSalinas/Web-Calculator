@@ -57,37 +57,36 @@ function operate (num1,operator,num2){
     return result;
 }
 
-function moreThanOneSymbol(){
-    let result = false; //assuming there is only one symbol
-    let displayText = displayExpression.innerHTML.split('');
-    displayText.pop();//quitamos el ultimo elemento
-    const symbols = ['+','-','\u00d7','\u00F7'];
-    symbols.forEach(function (item){
-        if (displayText.includes(item)){
-            result = true;
-            return;
-        }
-    });
-    return result;
+
+function toggleOperations (option){
+    if (option === 'deactivate'){
+        operations.forEach(function (operation) {
+            operation.removeEventListener('click', operationClickHandler);
+        });
+        equals.removeEventListener('click', equalsClickHandler);
+        availableOperations = false;
+    }
+    if(option === 'activate'){
+        operations.forEach(function (operation) {
+            operation.addEventListener('click', operationClickHandler);
+        });
+        equals.addEventListener('click', equalsClickHandler);
+        availableOperations = true;
+    }
 }
 
-function scanDisplay(displayText){//valor por defecto
-    displayText = displayText.split('');
+function newScanDisplay () {
+    let displayText = displayExpression.innerHTML.slice(0,displayExpression.innerHTML.length-1);
     const symbols = ['+','-','\u00d7','\u00F7'];
-    let indexSymbol;
-    let information = [];
-    symbols.forEach(function(item) {
-        if(displayText.indexOf(item)!==-1){//si contiene el simbolo
-            indexSymbol = displayText.indexOf(item);
+    let symbolIndex = -1;
+    for (let symbol of symbols){
+        if (displayText.includes(symbol)){
+            symbolIndex = displayText.indexOf(symbol);
+            break;
         }
-    });
-    let displaystring = displayText.join('');
-    information.push(displaystring.slice(0,indexSymbol));
-    information.push(displaystring[indexSymbol]);
-    information.push(displaystring.slice(indexSymbol+1));
-    return information;
+    }
+    return symbolIndex;    
 }
-
 
 let displayExpression = document.querySelector('.expression');
 let digits = document.querySelectorAll('.digit');
@@ -99,80 +98,85 @@ let equals = document.querySelector('.equals');
 let mainFrame = document.querySelector('.main-body');
 
 let operations = document.querySelectorAll('.operation');
-
-
-
-digits.forEach(function (digit) {
-    digit.addEventListener('click', function () {
-        displayExpression.innerHTML = displayExpression.innerHTML +`${digit.innerHTML}`;
-    });
-
-});
-
-operations.forEach(function (item) {
-    item.addEventListener('click', function () {
-        displayExpression.innerHTML = displayExpression.innerHTML +`${item.innerHTML}`;
-        if (moreThanOneSymbol()){
-            let displayText = displayExpression.innerHTML.split('');
-            displayText.pop();
-            displayText = displayText.join('');
-            let result = evaluate(displayText);
-            let lastSymbol = displayExpression.innerHTML.charAt(displayExpression.innerHTML.length-1);
-            displayExpression.innerHTML = result+lastSymbol;
-        }
-    });
-});
-
-clearAll.addEventListener('click', function() {
-    displayExpression.innerHTML = '';
-    answer.innerHTML = '';
-});
-
-clear.addEventListener('click', function (){
-    let text = displayExpression.innerHTML;
-    displayExpression.innerHTML = text.slice(0,text.length-1);
-});
-
-decimal.addEventListener('click', function (){
-    let characaters = displayExpression.innerHTML.split('');
-    if(!characaters.includes('.')){
-        displayExpression.innerHTML = displayExpression.innerHTML +`${decimal.innerHTML}`;
-    }
-});
-
-equals.addEventListener('click', function (){
-    evaluate();
-});
-
-function evaluate(displayText = displayExpression.innerHTML){
-    const data = scanDisplay(displayText);
-    let operationResult = operate(data[0],data[1],data[2]);
-    let finalResult;
-    /* if (data === undefined || data === null){
-        return;
-    }else{
-
-    } */
-    if(isNaN(operationResult)){
-        finalResult = 'SYNTAX ERROR';
-    }else{
-        finalResult = operationResult;
-    }    
-    answer.innerHTML = finalResult;
+let availableOperations = false;
+//callback functions for eventListeners
+function digitClickHandler() {
+    displayExpression.innerHTML = displayExpression.innerHTML + `${this.innerHTML}`;
+    toggleOperations('activate'); 
 }
 
+function operationClickHandler(){
+    if (displayExpression.innerHTML === ''){
+        toggleOperations('deactivate'); 
+    }
+    displayExpression.innerHTML = displayExpression.innerHTML +`${this.innerHTML}`;
+    toggleOperations('deactivate'); 
+    let symbolIndex = newScanDisplay();
+    if (symbolIndex !== -1){
+        let displayText = displayExpression.innerHTML.slice(0,displayExpression.innerHTML.length-1);
+        let operand1 = displayText.slice(0,symbolIndex);
+        let operator = displayText.at(symbolIndex);
+        let operand2 = displayText.slice(symbolIndex+1);
+        let result = operate(operand1, operator, operand2);
+        displayExpression.innerHTML = displayExpression.innerHTML.replace(displayText, String(result));
+    }
+}
+
+function clearAllClickHandler (){
+    displayExpression.innerHTML = '';
+    answer.innerHTML = '';
+}
+
+function clearClickHandler () {
+    let text = displayExpression.innerHTML;
+    displayExpression.innerHTML = text.slice(0,text.length-1);
+    if(availableOperations === false && text !== ''){
+        toggleOperations('activate');
+    }
+}
+
+function decimalClickHandler (){
+    let characters = displayExpression.innerHTML.split('');
+    if(!characters.includes('.')){
+        displayExpression.innerHTML = displayExpression.innerHTML +`${decimal.innerHTML}`;
+    }
+}
+
+function equalsClickHandler(){
+    let symbolIndex = newScanDisplay();
+    let displayText = displayExpression.innerHTML;
+    let operand1 = displayText.slice(0,symbolIndex);
+    let operator = displayText.at(symbolIndex);
+    let operand2 = displayText.slice(symbolIndex+1);
+    let finalResult = operate(operand1, operator, operand2);
+    
+    //fix this part by checking if finalresult is undefined
+    if (typeof finalResult !== 'undefined'){
+        answer.innerHTML = finalResult;
+    }
+}
+
+//EventListeners
+digits.forEach((digit) => digit.addEventListener('click', digitClickHandler));
+
+// operations.forEach((operation) => operation.addEventListener('click',operationClickHandler)); 
+
+clearAll.addEventListener('click',clearAllClickHandler );
+
+clear.addEventListener('click',clearClickHandler);
+
+decimal.addEventListener('click',decimalClickHandler);
+
+equals.addEventListener('click',equalsClickHandler);
+
+
 document.addEventListener('keypress', function(e) {
-    //figure out this part!
     e.preventDefault();
     let key = e.key;
-    console.log(key);
     const triggerEvent = new Event('click');
     const digitNodesArray = Array.from(digits);
     const operationNodesArray = Array.from(operations);
     switch (key) {
-        case 'Backspace':
-            clear.dispatchEvent(triggerEvent);
-            break;
         case 'Enter':
             equals.dispatchEvent(triggerEvent);
             break;
@@ -198,4 +202,12 @@ document.addEventListener('keypress', function(e) {
             break;
     }
 });
+
+document.addEventListener('keydown', function (e) {
+    const triggerEvent = new Event('click');
+    if(e.key === 'Backspace'){
+        clear.dispatchEvent(triggerEvent);
+    }
+})
+
 
